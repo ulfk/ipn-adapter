@@ -13,7 +13,7 @@ Copy the `settings.php.template`-file to `settings.php` and open it in an editor
 | Key | Description | Example |
 |-----|-------------|---------|
 | `BREVO_SECRET` | API-key from Brevo. Be aware that you need to add the IP-address of your Wordpress-server to the allowed addresses| `"some-secret-api-key"` |
-| `DIGISTORE_SECRET` | The password you will set in the generic IPN configuration in Digistore | `whatever-password` |
+| `DIGISTORE_SECRET` | The password you will set in the generic IPN configuration in Digistore | `"whatever-password"` |
 | `NEWSLETTER_LIST_ID` | Brevo list ID of your newsletter list. If `AddToNewsLetterList` is enabled, the buyers email will be added to that list | 123 |
 | `COURSE_LIST_ID_<ProductId>`| Be sure to replace `<ProductId>` by the Digistore Product-ID which you want to link to a certain mailing list. Set the Brevo list ID as value | 345 |
 
