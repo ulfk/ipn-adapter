@@ -1,0 +1,16 @@
+# Testing file (you need VS Code with addon "REST Client")
+
+###
+POST https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/ipn-adapter.php
+Content-Type: application/json
+
+{
+    "buyer_email": "test001@email.com",
+    "address_email": "test001@email.com",
+    "product_id": 12345,
+    "event": "on_payment",
+    "order_id": 4711,
+    "address_last_name": "Mustermann",
+    "address_first_name": "Max"
+}
+
