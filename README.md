@@ -1,4 +1,4 @@
-# Wordpress Plugin to connect Digistore IPN tp Brevo
+# WP Plugin to connect Digistore IPN to Brevo
 This is currently a quick-and-dirty solution to connect Digistore with Brevo to add buyers to mailing-lists.
 
 ## Why?
