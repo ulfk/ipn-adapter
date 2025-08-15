@@ -9,6 +9,8 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating releases
     
     steps:
     - name: Checkout code
@@ -79,13 +81,10 @@ jobs:
         echo "zip_name=$ZIP_NAME" >> $GITHUB_ENV
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ steps.plugin_info.outputs.version || github.ref }}
+        files: ./build/${{ env.zip_name }}
+        name: Release ${{ steps.plugin_info.outputs.version || github.ref_name }}
         body: |
           WordPress Plugin Release
           
@@ -100,13 +99,3 @@ jobs:
           See commit history for detailed changes.
         draft: false
         prerelease: false
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/${{ env.zip_name }}
-        asset_name: ${{ env.zip_name }}
-        asset_content_type: application/zip
