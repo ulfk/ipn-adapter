@@ -14,22 +14,22 @@ function has_valid_email($data) {
 	return $email != "" && $email != null;
 }
 
-
-log_to_file("*********************************");
+$log_viewer = new Log_Viewer();
+$log_viewer->write_log("*********************************");
 
 $data = get_request_data();
-log_to_file("INFO Data received from Digistore: " . print_r($data, true));
+$log_viewer->write_log("INFO Data received from Digistore: " . print_r($data, true));
 
 if (!has_valid_signature($data, $settings["DIGISTORE_SECRET"]))
 {
-    log_to_file("ERROR: invalid digitore signature");
+    $log_viewer->write_log("ERROR: invalid digitore signature");
     http_response_code(403); 
     exit();
 }
 
 if (!has_valid_email($data))
 {
-    log_to_file("ERROR: no valid email found");
+    $log_viewer->write_log("ERROR: no valid email found");
     http_response_code(400); 
     exit();
 }
@@ -54,7 +54,7 @@ if ($settings["AddToNewsletterList"] && isset($settings["NEWSLETTER_LIST_ID"])) 
 if ($event === 'on_payment') {
     $succeeded = brevo_upsert_contact($email, $listIds, $attributes, $settings["BREVO_SECRET"]);
     if(!$succeeded) {
-        log_to_file("ERROR: Brevo call failed");
+        $log_viewer->write_log("ERROR: Brevo call failed");
         http_response_code(502); 
         exit();       
     }

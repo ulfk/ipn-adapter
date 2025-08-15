@@ -6,15 +6,19 @@
 Plugin Name: IPN-Adapter
 Plugin URI: https://github.com/ulfk/ipn-adapter
 Description: IPN Adapter by Ulf Kuehnle.
-Version: 0.2.1
+Version: 0.3.0
 Author: Ulf Kuehnle
 Author URI: https://ulf-kuehnle.de/
-License: free
+License: GPLv2
 */
 
-include_once "log-viewer.php";
+include_once "logging.php";
+$log_viewer = null;
 
-$wp_plugin_log_viewer = new WP_Plugin_Log_Viewer('ipn-adapter');
-
+add_action('init', function() {
+    global $log_viewer;
+    $log_viewer = new Log_Viewer();
+	$log_viewer->init_wp_hooks();
+});
 
 ?>
