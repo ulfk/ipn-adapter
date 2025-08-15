@@ -6,7 +6,7 @@ include_once "brevo.php";
 include_once "digistore.php";
 
 function get_request_data() {
-	return array_merge(empty($_POST) ? array() : $_POST, (array) json_decode(file_get_contents('php://input'), true), $_GET);
+	return array_merge(empty($_POST) ? array() : $_POST, (array) json_decode(file_get_contents('php://input', false, null, 0, 50*1014), true), $_GET);
 }
 
 function has_valid_email($data) {

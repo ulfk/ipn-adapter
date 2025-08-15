@@ -6,7 +6,7 @@
 Plugin Name: IPN-Adapter
 Plugin URI: https://github.com/ulfk/ipn-adapter
 Description: IPN Adapter by Ulf Kuehnle.
-Version: 0.4.0
+Version: 0.4.1
 Author: Ulf Kuehnle
 Author URI: https://ulf-kuehnle.de/
 License: GPLv2
