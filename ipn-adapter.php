@@ -55,8 +55,11 @@ $attributes = [
     'COURSE_ID' => $product, 
     'LAST_ORDER_ID' => $data['order_id'] ?? null
 ];
-$listIds = [ $settings["COURSE_LIST_ID_".strval($product)] ];
-if ($settings["AddToNewsLetterList"]) {
+$listIds = array();
+if(isset($settings["COURSE_LIST_ID_".strval($product)])) {
+    $listIds[] = $settings["COURSE_LIST_ID_".strval($product)];
+}
+if ($settings["AddToNewsletterList"] && isset($settings["NEWSLETTER_LIST_ID"])) {
     $listIds[] = $settings["NEWSLETTER_LIST_ID"];
 }
 
