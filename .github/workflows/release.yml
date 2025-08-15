@@ -1,0 +1,112 @@
+name: Build and Release WordPress Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0, v2.1.3, etc.
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Get plugin info
+      id: plugin_info
+      run: |
+        # Extract plugin name from directory or main plugin file
+        PLUGIN_NAME=$(basename "$GITHUB_REPOSITORY")
+        echo "plugin_name=$PLUGIN_NAME" >> $GITHUB_OUTPUT
+        
+        # If you have a specific main plugin file, you can extract version from it
+        if [ -f "inp-adapter.php" ]; then
+          VERSION=$(grep -i "Version:" ipn-adapter.php | head -1 | sed 's/.*Version:\s*//' | sed 's/\s*$//')
+          if [ -n "$VERSION" ]; then
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+        fi
+        
+        # Use tag as version if available
+        if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$TAG_VERSION" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create plugin directory structure
+      run: |
+        mkdir -p build
+        PLUGIN_NAME="${{ steps.plugin_info.outputs.plugin_name }}"
+        
+        # Copy all files except unwanted ones
+        rsync -av \
+          --exclude='.git*' \
+          --exclude='node_modules' \
+          --exclude='build' \
+          --exclude='*.log' \
+          --exclude='.DS_Store' \
+          --exclude='Thumbs.db' \
+          --exclude='*.zip' \
+          --exclude='composer.json' \
+          --exclude='composer.lock' \
+          --exclude='package.json' \
+          --exclude='package-lock.json' \
+          --exclude='webpack.config.js' \
+          --exclude='gulpfile.js' \
+          --exclude='Gruntfile.js' \
+          --exclude='.github' \
+          --exclude='README.md' \
+          --exclude='tests' \
+          --exclude='settings.php' \
+          --exclude='phpunit.xml' \
+          ./ "build/$PLUGIN_NAME/"
+
+    - name: Create ZIP file
+      run: |
+        cd build
+        PLUGIN_NAME="${{ steps.plugin_info.outputs.plugin_name }}"
+        VERSION="${{ steps.plugin_info.outputs.version }}"
+        
+        if [ -n "$VERSION" ]; then
+          ZIP_NAME="${PLUGIN_NAME}-${VERSION}.zip"
+        else
+          ZIP_NAME="${PLUGIN_NAME}.zip"
+        fi
+        
+        zip -r "$ZIP_NAME" "$PLUGIN_NAME"
+        echo "zip_name=$ZIP_NAME" >> $GITHUB_ENV
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.plugin_info.outputs.version || github.ref }}
+        body: |
+          WordPress Plugin Release
+          
+          ## Installation
+          1. Download the ZIP file below
+          2. Go to your WordPress admin dashboard
+          3. Navigate to Plugins → Add New → Upload Plugin
+          4. Select the ZIP file and click "Install Now"
+          5. Activate the plugin
+          
+          ## Changes
+          See commit history for detailed changes.
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/${{ env.zip_name }}
+        asset_name: ${{ env.zip_name }}
+        asset_content_type: application/zip
