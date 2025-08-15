@@ -24,8 +24,8 @@ jobs:
         echo "plugin_name=$PLUGIN_NAME" >> $GITHUB_OUTPUT
         
         # If you have a specific main plugin file, you can extract version from it
-        if [ -f "inp-adapter.php" ]; then
-          VERSION=$(grep -i "Version:" ipn-adapter.php | head -1 | sed 's/.*Version:\s*//' | sed 's/\s*$//')
+        if [ -f "plugin-main.php" ]; then
+          VERSION=$(grep -i "Version:" plugin-main.php | head -1 | sed 's/.*Version:\s*//' | sed 's/\s*$//')
           if [ -n "$VERSION" ]; then
             echo "version=$VERSION" >> $GITHUB_OUTPUT
           fi
