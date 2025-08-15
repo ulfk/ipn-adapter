@@ -3,8 +3,10 @@
  * Brevo specific part for adding a new email as contact and add that contact to mailing-lists
  */
 
+
 function brevo_upsert_contact($email, $listIds, $attributes, $secret)
 {
+    $log = new Log_Viewer();
     $data = 
     [
         "email" => $email, 
@@ -13,9 +15,9 @@ function brevo_upsert_contact($email, $listIds, $attributes, $secret)
         "updateEnabled" => true
     ];
 
-    log_to_file("INFO Send data to Brevo: ".print_r($data,true));
+    $log->write_log("Send data to Brevo: ".print_r($data,true));
     $response = callBrevoEndpoint("contacts",$secret, $data);
-	log_to_file(($response['success'] ? "INFO" : "ERROR")." Brevo response: ".print_r($response, true));
+	$log->write_log("Brevo response: ".print_r($response, true), ($response['success'] ? "INFO" : "ERROR"));
     return $response['success'];
 }
 

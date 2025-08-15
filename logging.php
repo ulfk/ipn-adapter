@@ -13,9 +13,16 @@ class Log_Viewer {
         $this->plugin_slug = $plugin_slug;
         
         // Set log file path - you can customize this
-        $upload_dir = wp_upload_dir();
-        $this->log_file_path = $upload_dir['basedir'] . '/' . $plugin_slug . '/' . $plugin_slug . '.log';
-        
+        $logfile_dir = "";
+        if(function_exists("wp_upload_dir")) {
+            $upload_dir = wp_upload_dir();
+            $logfile_dir = $upload_dir['basedir'] . '/' . $plugin_slug . '/';
+        }
+        else if (is_dir("../../uploads/". $plugin_slug))
+        {
+            $logfile_dir = "../../uploads/". $plugin_slug . "/";
+        }
+        $this->log_file_path = $logfile_dir . $plugin_slug . '.log';
     }
 
     public function init_wp_hooks() {
@@ -106,7 +113,7 @@ class Log_Viewer {
         
         // Read last 1000 lines to prevent memory issues with large log files
         $lines = $this->tail($this->log_file_path, 1000);
-        return implode("\n", array_reverse($lines));
+        return implode("", $lines);
     }
     
     /**
@@ -356,7 +363,7 @@ class Log_Viewer {
     }
     
     /**
-     * Helper method to write to log file (use this in your plugin)
+     * Write log to logfile
      */
     public function write_log($message, $level = 'INFO') {
         $log_dir = dirname($this->log_file_path);
@@ -367,13 +374,14 @@ class Log_Viewer {
         }
         
         $timestamp = date('Y-m-d H:i:s');
-        $log_entry = "[$timestamp] [$level] $message" . PHP_EOL;
+        $log_entry = "[$timestamp] [$level] $message";
+
+        $log_entry = preg_replace('/^\s*$/m', '', $log_entry);
+        $log_entry = preg_replace('/\n+/', "\n", $log_entry);
+        $log_entry = trim($log_entry) . PHP_EOL;
         
         file_put_contents($this->log_file_path, $log_entry, FILE_APPEND | LOCK_EX);
     }
 }
 
-// Example usage for logging (call this from anywhere in your plugin):
-// $wp_plugin_log_viewer->write_log('Plugin initialized successfully');
-// $wp_plugin_log_viewer->write_log('Error occurred while processing data', 'ERROR');
 ?>

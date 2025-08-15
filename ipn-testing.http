@@ -1,7 +1,7 @@
 # Testing file (you need VS Code with addon "REST Client")
 
 ###
-POST https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/ipn-adapter.php
+POST https://ulf-kuehnle.de/wp/wp-content/plugins/ipn-adapter/ipn-adapter.php
 Content-Type: application/json
 
 {
@@ -11,6 +11,7 @@ Content-Type: application/json
     "event": "on_payment",
     "order_id": 4711,
     "address_last_name": "Mustermann",
-    "address_first_name": "Max"
+    "address_first_name": "Max",
+    "sha_sign": "87076F6FBBEE865420A7B7FDB57EDC3020D97F85632300F8D909BD7147F256D6DC87E30317B95A65C8677895D3163B2927D40874FC75BBDB7D08C81E88735392"
 }
 
