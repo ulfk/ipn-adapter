@@ -6,7 +6,7 @@ Digitsore currently does not support Brevo natively. So if you want to add buyer
 
 ## How?
 If you add these files as plugin to your Wordpress, the endpoint will be `https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/ipn-adapter.php`.
-To add this code as a plugin, create a zip-file of this folder and upload it manually as plugin to your Wordpress. Be sure to have the folder (`ipn-adapter`) in your ZIP-file and not only the plain files.
+To add this code as a plugin, download the latest release and upload it to your Wordpress.
 
 ## Setup of IPN-Adapter
 Rename the `settings.php.template`-file to `settings.php` and open it in an editor. Set the values as follows:
