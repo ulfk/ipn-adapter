@@ -1,7 +1,7 @@
 # Testing file (you need VS Code with addon "REST Client")
 
 ###
-POST https://ulf-kuehnle.de/wp/wp-content/plugins/ipn-adapter/ipn-adapter.php
+POST https://ulf-kuehnle.de/wp/wp-content/plugins/ipn-adapter/endpoint.php
 Content-Type: application/json
 
 {
