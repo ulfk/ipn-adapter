@@ -62,7 +62,6 @@ jobs:
           --exclude='.github' \
           --exclude='README.md' \
           --exclude='tests' \
-          --exclude='settings.php' \
           --exclude='phpunit.xml' \
           ./ "build/$PLUGIN_NAME/"
 
