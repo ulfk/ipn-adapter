@@ -69,7 +69,6 @@ function has_valid_signature($data, $secret)
     return $calculatedSignature == $receivedSignature;
 }
 
-
 function get_email($data) {
 	return $data['buyer_email'] ?? $data['address_email'];
 }

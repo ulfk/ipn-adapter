@@ -3,7 +3,6 @@
  * Brevo specific part for adding a new email as contact and add that contact to mailing-lists
  */
 
-
 function brevo_upsert_contact($email, $listIds, $attributes, $secret)
 {
     $log = new Log_Viewer();
@@ -23,15 +22,11 @@ function brevo_upsert_contact($email, $listIds, $attributes, $secret)
 
 function callBrevoEndpoint($url, $apiKey, $data) 
 {
-    // JSON-Body erstellen
     $jsonData = json_encode($data);
-    
-    // cURL-Session initialisieren
     $curl = curl_init();
 
     $brevoBaseEndpoint = "https://api.brevo.com/v3/";
     
-    // cURL-Optionen setzen
     curl_setopt_array($curl, [
         CURLOPT_URL => $brevoBaseEndpoint.$url,
         CURLOPT_RETURNTRANSFER => true,
@@ -47,15 +42,11 @@ function callBrevoEndpoint($url, $apiKey, $data)
         CURLOPT_SSL_VERIFYHOST => 2
     ]);
     
-    // Request ausführen
     $response = curl_exec($curl);
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     $error = curl_error($curl);
-
-    // cURL-Session schließen
     curl_close($curl);
     
-    // Response zurückgeben
     return [
         'success' => ($httpCode >= 200 && $httpCode < 300),
         'http_code' => $httpCode,

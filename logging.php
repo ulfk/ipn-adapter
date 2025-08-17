@@ -1,7 +1,6 @@
 <?php
 /**
  * Log Viewer functionality for WordPress Plugin
- * Add this code to your main plugin file or create a separate log-viewer.php file
  */
 
 class Log_Viewer {
@@ -12,7 +11,6 @@ class Log_Viewer {
     public function __construct($plugin_slug = 'ipn-adapter') {
         $this->plugin_slug = $plugin_slug;
         
-        // Set log file path - you can customize this
         $logfile_dir = "";
         if(function_exists("wp_upload_dir")) {
             $upload_dir = wp_upload_dir();
@@ -26,7 +24,6 @@ class Log_Viewer {
     }
 
     public function init_wp_hooks() {
-        // Initialize hooks
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('wp_ajax_refresh_log', array($this, 'ajax_refresh_log'));
@@ -40,8 +37,8 @@ class Log_Viewer {
     public function add_admin_menu() {
         add_submenu_page(
             'tools.php',                    // Parent menu (Tools)
-            'Plugin Log Viewer',            // Page title
-            'View IPN Logs',                // Menu title
+            'IPN Log Viewer',               // Page title
+            'IPN Logs',                     // Menu title
             'manage_options',               // Required capability
             $this->plugin_slug . '-logs',   // Menu slug
             array($this, 'display_log_page') // Callback function
@@ -56,11 +53,7 @@ class Log_Viewer {
         if (strpos($hook, $this->plugin_slug . '-logs') === false) {
             return;
         }
-        
-        // Add inline CSS for log viewer
         wp_add_inline_style('wp-admin', $this->get_log_viewer_css());
-        
-        // Add inline JavaScript
         wp_add_inline_script('jquery', $this->get_log_viewer_js());
     }
     
@@ -68,7 +61,6 @@ class Log_Viewer {
      * Display the log viewer page
      */
     public function display_log_page() {
-        // Check user permissions
         if (!current_user_can('manage_options')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
@@ -111,7 +103,7 @@ class Log_Viewer {
             return 'Log file not found. No logs have been generated yet.';
         }
         
-        // Read last 1000 lines to prevent memory issues with large log files
+        // Read max. 1000 lines to prevent memory issues with large log files
         $lines = $this->tail($this->log_file_path, 1000);
         return implode("", $lines);
     }
@@ -192,7 +184,6 @@ class Log_Viewer {
      * AJAX handler for refreshing log content
      */
     public function ajax_refresh_log() {
-        // Check permissions and nonce
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
@@ -212,7 +203,6 @@ class Log_Viewer {
      * AJAX handler for clearing log file
      */
     public function ajax_clear_log() {
-        // Check permissions and nonce
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
@@ -235,7 +225,6 @@ class Log_Viewer {
      * AJAX handler for downloading log file
      */
     public function ajax_download_log() {
-        // Check permissions and nonce
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }

@@ -1,24 +1,27 @@
 # WP Plugin to connect Digistore IPN to Brevo
-This is currently a quick-and-dirty solution to connect Digistore with Brevo to add buyers to mailing-lists.
+This is a solution to connect Digistore with Brevo to add buyers to mailing-lists.
 
 ## Why?
-Digitsore currently does not support Brevo natively. So if you want to add buyers of your products to your mailing-lists, there is currently no easy (and free of extra charge) way to do this. So we had to find another solution. As there already was a website based on Wordpress involved, the easiest way was to write a small pseudo-plugin for Wordpress, that acts as proxy between Digistore and Brevo.
+Digistore currently does not support Brevo natively. So if you want to add buyers of your products to your mailing-lists, there is currently no easy (and free of extra charge) way to do this. So we had to find another solution. As there already was a website based on Wordpress involved, the easiest way was to write a small plugin for Wordpress, that acts as proxy between Digistore and Brevo.
 
 ## How?
-If you add these files as plugin to your Wordpress, the endpoint will be `https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/ipn-adapter.php`.
-To add this code as a plugin, download the latest release and upload it to your Wordpress.
+If you install this plugin in your Wordpress, the endpoint will be `https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/endpoint.php`.
+To add this code as a plugin, download the latest release zip-file and upload it to your Wordpress.
 
 ## Setup of IPN-Adapter
-Rename the `settings.php.template`-file to `settings.php` and open it in an editor. Set the values as follows:
-| Key | Description | Example |
-|-----|-------------|---------|
-| `BREVO_SECRET` | API-key from Brevo. | `"some-secret-api-key"` |
-| `DIGISTORE_SECRET` | The password you will set in the generic IPN configuration in Digistore | `"whatever-password"` |
-| `NEWSLETTER_LIST_ID` | Brevo list ID of your newsletter list. | `123` |
-| `COURSE_LIST_ID_<ProductId>`| Be sure to replace `<ProductId>` with the Digistore Product-ID which you want to link to a certain mailing list. Set the Brevo list ID as value. The settings entry could then for example look like `"COURSE_LIST_ID_12345" => 9876` | `345` |
-| `LOG_VIEWER_KEY` | The key that needs to be provided to access to logs via `logviewer.php`. | `"whatever-secret-key"` | 
+Open the settings-page `IPN Adapter` in the Wordpress menu `Settings`.
 
-You can add as much `COURSE_LIST_ID_<ProductId>`-entries as you like to map several products to specific lists.
+Rename the `settings.php.template`-file to `settings.php` and open it in an editor. Set the values as follows:
+| Field | Description |
+|-----|-------------|
+| Adapter endpoint for Digistore | The adapter endpoint URL, you need to set in Digistore, is displayed. You can copy it the the clipboard by clicking on the clipboard-icon.<br>Be sure to configure `POST` as method in Digistore. |
+| Digistore Secret | The password you choose and set in Digistore for the IPN. |
+| Brevo API Key | The API key from Brevo |
+| Newsletter List ID | Brevo list ID of your newsletter list. |
+| Product ID Mapping | Map Digistore product IDs to specific Brevo list IDs as needed |
+
+## View Logs
+The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN Logs` in the `Tools` menu you can view those logs.
 
 ## Digistore hints
 - Add a generic IPN 
