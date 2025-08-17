@@ -3,7 +3,6 @@
  * Manage Settings in a separate PHP-file for access without WP-methods
  */
 
-include_once "logging.php";
 
 class Settings_Manager {
     
@@ -25,7 +24,7 @@ class Settings_Manager {
             $settings_dir = "../../uploads/". $plugin_slug . "/";
         }
 
-        $this->settings_file_path = $settings_dir . 'settings.php';
+        $this->settings_file_path = $settings_dir . 'ipn-config.php';
     }
 
     public function init_wp_hooks() {
@@ -83,7 +82,7 @@ class Settings_Manager {
     /**
      * Read Settings
      */
-    private function load_settings_from_file() {
+    public function load_settings_from_file() {
         if (!file_exists($this->settings_file_path)) {
             return $this->get_default_settings();
         }
