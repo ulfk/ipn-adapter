@@ -25,6 +25,7 @@ $settings = $settings_manager->load_settings_from_file();
 $data = get_request_data();
 $log_viewer->write_log("Data received from Digistore: " . print_r($data, true));
 
+// ensure valid signature
 if (!has_valid_signature($data, $settings["DIGISTORE_SECRET"]))
 {
     $log_viewer->write_log("Invalid digitore signature", "ERROR");
@@ -32,6 +33,15 @@ if (!has_valid_signature($data, $settings["DIGISTORE_SECRET"]))
     exit();
 }
 
+// check for valid event type
+$event = $data['event'] ?? "-unknown";
+if ($event != 'on_payment') {
+	$log_viewer->write_log("IPN event '".$event."' ignored", "WARNING");
+	echo "OK";
+	exit();
+}
+
+// check if a valid email was received
 if (!has_valid_email($data))
 {
     $log_viewer->write_log("No valid email found", "ERROR");
@@ -39,9 +49,9 @@ if (!has_valid_email($data))
     exit();
 }
 
+// prepare data for Brevo
 $email = get_email($data);
 $product = $data['product_id'];
-$event = $data['event'];
 $attributes = [
     'VORNAME' => $data['address_first_name'] ?? null, 
     'NACHNAME' => $data['address_last_name'] ?? null, 
@@ -56,15 +66,14 @@ if ($settings["AddToNewsletterList"] && isset($settings["NEWSLETTER_LIST_ID"])) 
     $listIds[] = $settings["NEWSLETTER_LIST_ID"];
 }
 
-if ($event === 'on_payment') {
-    $succeeded = brevo_upsert_contact($email, $listIds, $attributes, $settings["BREVO_SECRET"]);
-    if($succeeded) {
-        $log_viewer->write_log("Brevo call succeded");
-    } else {
-        $log_viewer->write_log("Brevo call failed", "ERROR");
-        http_response_code(502); 
-        exit();       
-    }
+// execute call to Brevo API
+$succeeded = brevo_upsert_contact($email, $listIds, $attributes, $settings["BREVO_SECRET"]);
+if($succeeded) {
+    $log_viewer->write_log("Brevo call succeded");
+} else {
+    $log_viewer->write_log("Brevo call failed", "ERROR");
+    http_response_code(502); 
+    exit();       
 }
 
 echo "OK";
