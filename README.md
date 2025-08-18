@@ -9,9 +9,8 @@ If you install this plugin in your Wordpress, the endpoint will be `https://<YOU
 To add this code as a plugin, download the latest release zip-file and upload it to your Wordpress.
 
 ## Setup of IPN-Adapter
-Open the settings-page `IPN Adapter` in the Wordpress menu `Settings`.
+Open the settings-page `IPN Adapter` in the Wordpress `Settings` menu and set the values accordingly.
 
-Rename the `settings.php.template`-file to `settings.php` and open it in an editor. Set the values as follows:
 | Field | Description |
 |-----|-------------|
 | Adapter endpoint for Digistore | The adapter endpoint URL, you need to set in Digistore, is displayed. You can copy it the the clipboard by clicking on the clipboard-icon.<br>Be sure to configure `POST` as method in Digistore. |
@@ -21,7 +20,7 @@ Rename the `settings.php.template`-file to `settings.php` and open it in an edit
 | Product ID Mapping | Map Digistore product IDs to specific Brevo list IDs as needed |
 
 ## View Logs
-The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN Logs` in the `Tools` menu you can view those logs.
+The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN Logs` in the `Tools` menu, you can view those logs.
 
 ## Digistore hints
 - Add a generic IPN 
