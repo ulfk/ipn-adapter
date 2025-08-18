@@ -26,7 +26,8 @@ The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN 
 - Add a generic IPN 
 - Be sure to deactivate grouping of calls
 - This has not been tested with any AddOn products
-- Currently, only for the "on_payment" event, the e-mail will be added to Brevo lists. All other IPN events will be ignored for now.
+- Currently the endpoint only processed "on_payment" events. All other IPN events will be ignored for now.
+- The endpoint will return `OK` in case of success.
 
 ## Brevo hints
 - Be aware that you need to add the IP-address of your Wordpress-server to the allowed addresses.
