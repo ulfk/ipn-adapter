@@ -5,7 +5,7 @@
  */
 
 // This function was copied from https://www.digistore24.com/download/ipn/examples/ipn/sha_sign.php
-function calculate_digistore_signature($sha_passphrase, $parameters, $convert_keys_to_uppercase = false, $do_html_decode=false )
+function calculate_digistore_signature($sha_passphrase, $parameters, $convert_keys_to_uppercase = false, $do_html_decode=false)
 {
     $algorythm           = 'sha512';
     $sort_case_sensitive = true;
@@ -15,8 +15,8 @@ function calculate_digistore_signature($sha_passphrase, $parameters, $convert_ke
         return 'no_signature_passphrase_provided';
     }
 
-    unset( $parameters[ 'sha_sign' ] );
-    unset( $parameters[ 'SHASIGN' ] );
+    unset($parameters['sha_sign']);
+    unset($parameters['SHASIGN']);
 
     if ($convert_keys_to_uppercase)
     {
@@ -29,10 +29,10 @@ function calculate_digistore_signature($sha_passphrase, $parameters, $convert_ke
     {
         $keys_to_sort[] = $sort_case_sensitive
             ? $key
-            : strtoupper( $key );
+            : strtoupper($key);
     }
 
-    array_multisort( $keys_to_sort, SORT_STRING, $keys );
+    array_multisort($keys_to_sort, SORT_STRING, $keys);
 
     $sha_string = "";
     foreach ($keys as $key)
@@ -40,7 +40,7 @@ function calculate_digistore_signature($sha_passphrase, $parameters, $convert_ke
         $value = $parameters[$key];
 
         if ($do_html_decode) {
-            $value = html_entity_decode( $value );
+            $value = html_entity_decode($value);
         }
 
         $is_empty = !isset($value) || $value === "" || $value === false;
@@ -50,20 +50,22 @@ function calculate_digistore_signature($sha_passphrase, $parameters, $convert_ke
         }
 
         $upperkey = $convert_keys_to_uppercase
-            ? strtoupper( $key )
+            ? strtoupper($key)
             : $key;
 
         $sha_string .= "$upperkey=$value$sha_passphrase";
     }
 
-    $sha_sign = strtoupper( hash( $algorythm, $sha_string) );
+    $sha_sign = strtoupper(hash($algorythm, $sha_string));
 
     return $sha_sign;
 }
 
 function has_valid_signature($data, $secret)
 {
-    $receivedSignature = isset( $data['sha_sign'] ) ? $data['sha_sign'] : false;
+    $receivedSignature = isset($data['sha_sign']) ? $data['sha_sign'] : false;
+	if ($receivedSignature === false) return false;
+	
     $calculatedSignature = calculate_digistore_signature($secret, $data);
 
     return $calculatedSignature == $receivedSignature;
