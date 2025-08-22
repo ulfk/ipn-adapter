@@ -23,10 +23,10 @@ Open the settings-page `IPN Adapter` in the Wordpress `Settings` menu and set th
 The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN Logs` in the `Tools` menu, you can view those logs.
 
 ## Digistore24 hints
-- Add a generic IPN 
-- Be sure to deactivate grouping of calls
-- This has not been tested with any AddOn products
-- Currently the endpoint only processed "on_payment" events. All other IPN events will be ignored for now.
+- Add a generic IPN.
+- Be sure to deactivate grouping of calls.
+- This has not been tested with any AddOn products.
+- Currently the endpoint only processes "on_payment" events. All other IPN events will be ignored for now.
 - The endpoint will return `OK` in case of success.
 
 ## Brevo hints
