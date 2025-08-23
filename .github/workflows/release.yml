@@ -23,18 +23,25 @@ jobs:
         PLUGIN_NAME=$(basename "$GITHUB_REPOSITORY")
         echo "plugin_name=$PLUGIN_NAME" >> $GITHUB_OUTPUT
         
+        FILE_VERSION=''
         # If you have a specific main plugin file, you can extract version from it
-        if [ -f "plugin-main.php" ]; then
-          VERSION=$(grep -i "Version:" plugin-main.php | head -1 | sed 's/.*Version:\s*//' | sed 's/\s*$//')
-          if [ -n "$VERSION" ]; then
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-          fi
+        if [ -f "ipn-adapter.php" ]; then
+          FILE_VERSION=$(grep -i "Version:" ipn-adapter.php | head -1 | sed 's/.*Version:\s*//' | sed 's/\s*$//')
+          #if [ -n "$VERSION" ]; then
+          #  echo "version=$VERSION" >> $GITHUB_OUTPUT
+          #fi
         fi
         
         # Use tag as version if available
         if [ "$GITHUB_REF_TYPE" = "tag" ]; then
           TAG_VERSION=${GITHUB_REF#refs/tags/}
-          echo "version=$TAG_VERSION" >> $GITHUB_OUTPUT
+          if [ -n "$FILE_VERSION" -a "$FILE_VERSION" = "$TAG_VERSION" ]
+          then
+            echo "version=$TAG_VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "ERROR: file-version does not match tag-version"
+            exit 1
+          fi
         fi
 
     - name: Create plugin directory structure
@@ -80,6 +87,10 @@ jobs:
         zip -r "$ZIP_NAME" "$PLUGIN_NAME"
         echo "zip_name=$ZIP_NAME" >> $GITHUB_ENV
 
+    - name: Read Release Notes
+      id: release_notes
+      run: echo "release_notes_content=$(cat release-notes.md | tr '\n' '\r')" >> $GITHUB_OUTPUT
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
@@ -96,6 +107,6 @@ jobs:
           5. Activate the plugin
           
           ## Changes
-          See commit history for detailed changes.
+          ${{ steps.release_notes.outputs.release_notes_content }}
         draft: false
         prerelease: false
