@@ -35,11 +35,11 @@ jobs:
         # Use tag as version if available
         if [ "$GITHUB_REF_TYPE" = "tag" ]; then
           TAG_VERSION=${GITHUB_REF#refs/tags/}
-          if [ -n "$FILE_VERSION" -a "$FILE_VERSION" = "$TAG_VERSION" ]
+          if [ -n "$FILE_VERSION" -a "v$FILE_VERSION" = "$TAG_VERSION" ]
           then
             echo "version=$TAG_VERSION" >> $GITHUB_OUTPUT
           else
-            echo "ERROR: file-version does not match tag-version"
+            echo "ERROR: file-version 'v$FILE_VERSION' does not match tag-version '$TAG_VERSION'"
             exit 1
           fi
         fi
