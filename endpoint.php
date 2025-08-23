@@ -53,8 +53,8 @@ if (!has_valid_email($data))
 $email = get_email($data);
 $product = $data['product_id'];
 $attributes = [
-    'VORNAME' => $data['address_first_name'] ?? null, 
-    'NACHNAME' => $data['address_last_name'] ?? null, 
+    $settings["BREVO_FIRSTNAME"] => $data['address_first_name'] ?? null, 
+    $settings["BREVO_LASTNAME"] => $data['address_last_name'] ?? null, 
     'PRODUCT_ID' => $product, 
     'LAST_ORDER_ID' => $data['order_id'] ?? null
 ];

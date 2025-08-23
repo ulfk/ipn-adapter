@@ -124,7 +124,9 @@ class Settings_Manager {
         return array(
             'NEWSLETTER_LIST_ID' => 1,
             'DIGISTORE_SECRET' => '',
-            'BREVO_SECRET' => ''
+            'BREVO_SECRET' => '',
+            'BREVO_FIRSTNAME' => 'VORNAME',
+            'BREVO_LASTNAME' => 'NACHNAME'
         );
     }
     
@@ -176,11 +178,21 @@ class Settings_Manager {
             wp_die('Unauthorized');
         }
         
-        $settings = array();
+        $settings = $this->get_default_settings();
         
         // Newsletter List ID
         if (isset($_POST['newsletter_list_id'])) {
             $settings['NEWSLETTER_LIST_ID'] = max(1, (int)$_POST['newsletter_list_id']);
+        }
+
+        // Firstname field name
+        if (isset($_POST['brevo_firstname'])) {
+            $settings['BREVO_FIRSTNAME'] = $_POST['brevo_firstname'];
+        }
+        
+        // Lastname field name
+        if (isset($_POST['brevo_lastname'])) {
+            $settings['BREVO_LASTNAME'] = $_POST['brevo_lastname'];
         }
         
         // Secret Keys
@@ -247,6 +259,7 @@ class Settings_Manager {
                     <form method="post" action="">
                         <?php wp_nonce_field('save_proxy_settings', 'proxy_settings_nonce'); ?>
                         
+                        <h2>Digistore24 Settings</h2>
                         <table class="form-table">
                             <tbody>
                                 <tr>
@@ -272,7 +285,12 @@ class Settings_Manager {
                                         <p class="description">Password for Digistore-Integration</p>
                                     </td>
                                 </tr>
-                                
+                            </tbody>
+                        </table>
+
+                        <h2>Brevo Settings</h2>
+                        <table class="form-table">
+                            <tbody>
                                 <tr>
                                     <th scope="row">
                                         <label for="brevo_secret">Brevo API Key</label>
@@ -286,6 +304,34 @@ class Settings_Manager {
                                         <p class="description">API-Key from Brevo</p>
                                     </td>
                                 </tr>
+
+                                <tr>
+                                    <th scope="row">
+                                        <label for="brevo_firstname">Brevo Firstname Field</label>
+                                    </th>
+                                    <td>
+                                        <input type="text" 
+                                               id="brevo_firstname" 
+                                               name="brevo_firstname" 
+                                               value="<?php echo esc_attr($settings['BREVO_FIRSTNAME']); ?>" 
+                                               class="regular-text" />
+                                        <p class="description">Brevo fieldname for Firstname</p>
+                                    </td>
+                                </tr>                                
+
+                                <tr>
+                                    <th scope="row">
+                                        <label for="brevo_lastname">Brevo Lastname Field</label>
+                                    </th>
+                                    <td>
+                                        <input type="text" 
+                                               id="brevo_lastname" 
+                                               name="brevo_lastname" 
+                                               value="<?php echo esc_attr($settings['BREVO_LASTNAME']); ?>" 
+                                               class="regular-text" />
+                                        <p class="description">Brevo fieldname for Lastname</p>
+                                    </td>
+                                </tr> 
 
                                 <tr>
                                     <th scope="row">
@@ -305,7 +351,7 @@ class Settings_Manager {
                             </tbody>
                         </table>
                         
-                        <h2>Product ID Mapping</h2>
+                        <h4>Product ID Mapping</h4>
                         <p>Link your products with specific Brevo lists:</p>
                         
                         <div id="product-mappings">

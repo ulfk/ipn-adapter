@@ -4,9 +4,14 @@ This is a solution to connect Digistore24 with Brevo to add buyers to mailing-li
 ## Why?
 Digistore24 currently does not support Brevo natively. So if you want to add buyers of your products to your mailing-lists, there is currently no easy (and free of extra charge) way to do this. So we had to find another solution. As there already was a website based on Wordpress involved, the easiest way was to write a small plugin for Wordpress, that acts as proxy between Digistore24 and Brevo.
 
-## How?
-If you install this plugin in your Wordpress, the endpoint will be `https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/endpoint.php`.
-To add this code as a plugin, download the latest release zip-file and upload it to your Wordpress.
+## How does it work?
+The IPN-Adapter plugin procides an endpoint that acts as proxy. When a purchase is done on Digistore24, it will call the IPN-Adapters endpoint. The endpoint will transform the data, received from Digistore24, to the data needed for Brevo. The IPN-Adapter will then add the buyers e-mail address as contact in Brevo and will add that e-mail address to the configured mailing lists.
+
+This a graphical overview on how the IPN-adapter works:
+![IPN-Adpater Overview](overview.drawio.png)
+
+If you install this plugin in your Wordpress, the endpoint that you need to configure in Digistore24, will be `https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/endpoint.php`.
+To add this this plugin to your Wordpress, download the zip-file from the latest release and upload it to your Wordpress.
 
 ## Setup of IPN-Adapter
 Open the settings-page `IPN Adapter` in the Wordpress `Settings` menu and set the values accordingly.
@@ -14,10 +19,12 @@ Open the settings-page `IPN Adapter` in the Wordpress `Settings` menu and set th
 | Field | Description |
 |-----|-------------|
 | Adapter endpoint for Digistore24 | The adapter endpoint URL, you need to set in Digistore24, is displayed. You can copy it the the clipboard by clicking on the clipboard-icon.<br>Be sure to configure `POST` as method in Digistore24. |
-| Digistore24 Secret | The password you choose and set in Digistore24 for the IPN. |
-| Brevo API Key | The API key from Brevo |
-| Newsletter List ID | Brevo list ID of your newsletter list. |
-| Product ID Mapping | Map Digistore24 product IDs to specific Brevo list IDs as needed |
+| Digistore24 Secret               | The password you choose and set in Digistore24 for the IPN. |
+| API Key                          | The API key from Brevo |
+| Newsletter List ID               | Brevo list ID of your newsletter list. |
+| Firstname field                  | The IPN-adapter will send the firstname of the buyer in an attribute with the given name |
+| Lastname field                   | The IPN-adapter will send the lastname of the buyer in an attribute with the given name |
+| Product ID Mapping               | Map Digistore24 product IDs to specific Brevo list IDs as needed |
 
 ## View Logs
 The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN Logs` in the `Tools` menu, you can view those logs.
