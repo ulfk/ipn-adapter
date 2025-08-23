@@ -1,4 +1,4 @@
-### IPN-Adapter v1.1.2
+### IPN-Adapter v1.1.3
 - minor fixes
 
 ### IPN-Adapter v1.1.0
