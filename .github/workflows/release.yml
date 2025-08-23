@@ -59,6 +59,7 @@ jobs:
           --exclude='.DS_Store' \
           --exclude='Thumbs.db' \
           --exclude='*.zip' \
+          --exclude='*.png' \
           --exclude='composer.json' \
           --exclude='composer.lock' \
           --exclude='package.json' \
