@@ -11,7 +11,7 @@ This a graphical overview on how the IPN-adapter works:
 ![IPN-Adpater Overview](overview.drawio.png)
 
 If you install this plugin in your Wordpress, the endpoint that you need to configure in Digistore24, will be `https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/endpoint.php`.
-To add this this plugin to your Wordpress, download the zip-file from the latest release and upload it to your Wordpress.
+To add this plugin to your Wordpress, download the zip-file from the latest release and upload it to your Wordpress.
 
 ## Setup of IPN-Adapter
 Open the settings-page `IPN Adapter` in the Wordpress `Settings` menu and set the values accordingly.
@@ -32,12 +32,12 @@ The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN 
 ## Digistore24 hints
 - Add a generic IPN.
 - Be sure to deactivate grouping of calls.
-- This has not been tested with any AddOn products.
+- This plugin has not been tested with any AddOn products.
 - Currently the endpoint only processes "on_payment" events. All other IPN events will be ignored for now.
-- The endpoint will return `OK` in case of success.
+- The plugin-endpoint will return `OK` to Digistore in case of success.
 
 ## Brevo hints
-- Be aware that you need to add the IP-address of your Wordpress-server to the allowed addresses.
+- Be aware that you need to add the IP-address of your Wordpress-server to the allowed addresses for API calls.
 - Maybe you want to send other or more attributes to Brevo. You can change/add your attributes in the `$attributes` array in `ipn-adapter.php`.
 
 ## Bookmarks
