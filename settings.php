@@ -88,6 +88,13 @@ class Settings_Manager {
         }
         
         include $this->settings_file_path;
+        if (isset($settings) && $this->isBase64EncodingVersion($settings)) {
+            foreach ($settings as $key => $value) {
+                if (!is_numeric($value)) {
+                    $settings[$key] = base64_decode($value);
+                }
+            }
+        }
         
         return isset($settings) ? $settings : $this->get_default_settings();
     }
@@ -101,20 +108,35 @@ class Settings_Manager {
         $php_content .= "\t// Generated on: " . date('Y-m-d H:i:s') . "\n";
         $php_content .= "\t// DO NOT EDIT MANUALLY - Use WordPress Admin Interface\n";
         $php_content .= "\t\$settings = [\n";
-        
-        foreach ($settings as $key => $value) {
-            if (is_numeric($value)) {
-                $php_content .= "\t\t\"$key\" => $value,\n";
-            } else {
-                $escaped_value = addslashes($value);
-                $php_content .= "\t\t\"$key\" => \"$escaped_value\",\n";
-            }
+        if (!array_key_exists("VERSION", $settings)) {
+            $settings["VERSION"] = 2;
         }
         
-        $php_content .= "\t];\n";
+        $eol = "";
+        foreach ($settings as $key => $value) {
+            $php_content .= $eol;
+            if (is_numeric($value)) {
+                $php_content .= "\t\t\"$key\" => $value";
+            } else {
+                $escaped_value = "";
+                if ($this->isBase64EncodingVersion($settings)) {
+                    $escaped_value = base64_encode($value);
+                } else {
+                    $escaped_value = addslashes($value);
+                }
+                $php_content .= "\t\t\"$key\" => \"$escaped_value\"";
+            }
+            $eol = ",\n";
+        }
+        
+        $php_content .= "\n\t];\n";
         $php_content .= "?>";
         
         return file_put_contents($this->settings_file_path, $php_content, LOCK_EX) !== false;
+    }
+
+    private function isBase64EncodingVersion($settings) {
+        return array_key_exists("VERSION", $settings) && $settings["VERSION"] >= 2;
     }
     
     /**
@@ -122,6 +144,7 @@ class Settings_Manager {
      */
     private function get_default_settings() {
         return array(
+            'VERSION' => 2,
             'NEWSLETTER_LIST_ID' => 1,
             'DIGISTORE_SECRET' => '',
             'BREVO_SECRET' => '',
@@ -237,7 +260,7 @@ class Settings_Manager {
         if (!current_user_can('manage_options')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
-        
+
         $settings = $this->load_settings_from_file();
         $product_mappings = $this->get_product_mappings($settings);
         
@@ -277,7 +300,7 @@ class Settings_Manager {
                                         <label for="digistore_secret">Digistore Secret</label>
                                     </th>
                                     <td>
-                                        <input type="password" 
+                                        <input type="password" autocomplete="off"
                                                id="digistore_secret" 
                                                name="digistore_secret" 
                                                value="<?php echo esc_attr($settings['DIGISTORE_SECRET']); ?>" 
@@ -296,7 +319,7 @@ class Settings_Manager {
                                         <label for="brevo_secret">Brevo API Key</label>
                                     </th>
                                     <td>
-                                        <input type="password" 
+                                        <input type="password" autocomplete="off"
                                                id="brevo_secret" 
                                                name="brevo_secret" 
                                                value="<?php echo esc_attr($settings['BREVO_SECRET']); ?>" 

@@ -1,3 +1,6 @@
+### IPN-Adapter v1.2.0
+- change settings-storage to better handle special characters (strings get Base64 encoded)
+
 ### IPN-Adapter v1.1.3
 - minor fixes
 
