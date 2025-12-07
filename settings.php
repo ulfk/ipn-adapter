@@ -282,6 +282,24 @@ class Settings_Manager {
                     <form method="post" action="">
                         <?php wp_nonce_field('save_proxy_settings', 'proxy_settings_nonce'); ?>
                         
+                        <h2>General Info</h2>
+                        <ul style="list-style: square !important; padding-left: 30px !important;">
+                            <li><b>Logs:</b> See the <a href="<?php echo get_site_url()."/wp-admin/tools.php?page=ipn-adapter-logs";?>">IPN Logs page</a> to check the functionality and find out reasons for problems.</li>
+                            <li><b>Brevo hints</b>
+                                <ul style="list-style: circle !important; padding-left: 30px !important;">
+                                    <li>Be aware that you need to add the IP-address of your Wordpress-server to the allowed addresses for API calls in Brevo.</li>
+                                </ul>
+                            </li>
+                            <li><b>Digistore24 hints</b>
+                                <ul style="list-style: circle !important; padding-left: 30px !important;">
+                                    <li>Add a generic IPN.</li>
+                                    <li>Be sure to deactivate grouping of calls.</li>
+                                    <li>This plugin has not been tested with any AddOn products.</li>
+                                    <li>Currently the endpoint only processes "on_payment" events. All other IPN events will be ignored for now.</li>
+                                    <li>The plugin-endpoint will return <code>OK</code> to Digistore in case of success.</li>
+                                </ul>
+                            </li>
+                        </ul>
                         <h2>Digistore24 Settings</h2>
                         <table class="form-table">
                             <tbody>
