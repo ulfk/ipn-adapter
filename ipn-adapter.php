@@ -6,7 +6,7 @@
 Plugin Name: IPN-Adapter
 Plugin URI: https://github.com/ulfk/ipn-adapter
 Description: IPN Adapter - Connect Digistore to Brevo to add buyers e-mail addresses to your mailing-lists.
-Version: 1.2.0
+Version: 1.2.2
 Author: Ulf Kuehnle
 Author URI: https://ulf-kuehnle.de/
 License: GPLv2
