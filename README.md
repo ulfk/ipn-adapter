@@ -7,6 +7,8 @@ Digistore24 currently does not support Brevo natively. So if you want to add buy
 ## How does it work?
 The IPN-Adapter plugin provides an endpoint that acts as proxy. When a purchase is done on Digistore24, it will call the IPN-Adapters endpoint. The endpoint will transform the data, received from Digistore24, to the data needed for Brevo. The IPN-Adapter will then add the buyers e-mail address as contact in Brevo and will add that e-mail address to the configured mailing lists.
 
+**Important:** To get this plugin running, your Wordpress server needs to have a static IP-address or at least an IP-address from a static range. This is because Brevo secures their API by IP whitelisting which is described [here](https://developers.brevo.com/docs/ip-security). Check your hosting provider to find out, if your Wordpress server fulfills this requirement.
+
 This a graphical overview on how the IPN-adapter works:
 ![IPN-Adpater Overview](overview.drawio.png)
 
@@ -41,5 +43,8 @@ The plugin writes logs to a file in the uploads-folder. Via the menu entry `IPN 
 - Maybe you want to send other or more attributes to Brevo. You can change/add your attributes in the `$attributes` array in `ipn-adapter.php`.
 
 ## Bookmarks
-- Brevo API docu for "createcontact": https://developers.brevo.com/reference/createcontact
-- Digistore24 event docu: https://dev.digistore24.com/hc/en-us/articles/32480561422353-Events
+- Brevo 
+  - API docu for "createcontact": https://developers.brevo.com/reference/createcontact
+  - IP Security: https://developers.brevo.com/docs/ip-security
+- Digistore24
+  - IPN event docu: https://dev.digistore24.com/hc/en-us/articles/32480561422353-Events
