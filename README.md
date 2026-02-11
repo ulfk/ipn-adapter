@@ -9,7 +9,7 @@ The IPN-Adapter plugin provides an endpoint that acts as proxy. When a purchase 
 
 **Important:** To get this plugin running, your Wordpress server needs to have a static IP-address or at least an IP-address from a static range. This is because Brevo secures their API by IP whitelisting which is described [here](https://developers.brevo.com/docs/ip-security). Check your hosting provider to find out, if your Wordpress server fulfills this requirement.
 
-This a graphical overview on how the IPN-adapter works:
+The following picture shows a graphical overview on how the IPN-adapter works:
 ![IPN-Adpater Overview](overview.drawio.png)
 
 If you install this plugin in your Wordpress, the endpoint that you need to configure in Digistore24, will be `https://<YOUR-SERVER>/wp-content/plugins/ipn-adapter/endpoint.php`.
